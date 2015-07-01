@@ -123,7 +123,7 @@ install_pear () {
 
 install_pgvm () {
   echo -e '\n\n  * instalando pgvm\n'
-  curl -s -L https://raw.github.com/guedes/pgvm/master/bin/pgvm-self-install | bash -s -- --update
+  curl -s -L https://raw.githubusercontent.com/krlsdu/pgvm/master/bin/pgvm-self-install | bash -s -- --update
   exit_if_failed $?
 
   #source ~/.bashrc
