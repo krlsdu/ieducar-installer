@@ -1,0 +1,11 @@
+<VirtualHost *:80>
+
+  ServerName ieducar.local
+  DocumentRoot /home/lucasdavila/ieducar/ieducar
+
+  <Directory /home/lucasdavila/ieducar/ieducar>
+    Order deny,allow
+    AllowOverride all
+  </Directory>
+
+</VirtualHost>
