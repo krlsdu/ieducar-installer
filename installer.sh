@@ -123,10 +123,10 @@ install_pear () {
 
 install_pgvm () {
   echo -e '\n\n  * instalando pgvm\n'
-  #curl -s -L https://raw.githubusercontent.com/krlsdu/pgvm/master/bin/pgvm-self-install | bash -s -- --update
+  curl -s -L https://raw.githubusercontent.com/krlsdu/pgvm/master/bin/pgvm-self-install | bash -s -- --update
   exit_if_failed $?
 
-  #source ~/.bashrc
+  source ~/.bashrc
 
   if [ -z "$pgvm_home" ]
   then
@@ -144,10 +144,10 @@ install_pgvm () {
 
 install_pg () {
   echo -e '\n\n  * instalando postgres 8.2 via pgvm\n'
-  #pgvm install 8.2
-  #pgvm use 8.2.23
-  #pgvm cluster create main
-  #pgvm cluster start main
+  pgvm install 8.2
+  pgvm use 8.2.23
+  pgvm cluster create main
+  pgvm cluster start main
 
   echo -e '\n'
   required_read '    informe o nome desejado para o banco de dados (ex: ieducar): '
@@ -203,7 +203,7 @@ clone_ieducar () {
   rm -rf $APPDIR
 
   echo -e "\n\n  * clonando repositório ieducar no caminho $HOME/$APPDIR\n"
-  git clone git://github.com/ieducativa/ieducar.git -b ieducativa $APPDIR
+  git clone git://github.com/ieducativa/ieducar.git -b ieducativa $HOME/$APPDIR
   exit_if_failed $?
 
   echo -e "\n\n  * reconfigurando ieducar\n"
