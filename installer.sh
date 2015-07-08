@@ -165,7 +165,8 @@ install_pg () {
   echo -e '\n\n  * destruindo banco de dados caso exista\n'
   ~/.pgvm/environments/8.2.23/bin/dropdb $DBNAME -p 5433
 
-  DBUSER=ieducar
+  required_read '    informe o nome desejado para o usuario (ex: ieducar): '
+  DBUSER=$_INPUT
 
   if [ $USER != $DBUSER ]; then
     echo -e '\n\n  * criando usuário do banco de dados\n'
@@ -217,6 +218,7 @@ clone_ieducar () {
 
   echo -e "\n\n  * reconfigurando ieducar\n"
   rpl "app.database.dbname   = ieducar" "app.database.dbname   = $DBNAME" $HOME/$APPDIR/ieducar/configuration/ieducar.ini
+  rpl "app.database.username = ieducar" "app.database.username  = $DBUSER" $HOME/$APPDIR/ieducar/configuration/ieducar.ini
   sudo service apache2 reload
 }
 
