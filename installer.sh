@@ -143,15 +143,23 @@ install_pgvm () {
 }
 
 install_pg () {
+  
   echo -e '\n\n  * instalando postgres 8.2 via pgvm\n'
-  pgvm install 8.2
-  pgvm use 8.2.23
+  DBINSTALLED=`pgvm list | grep -o 8.2.23`
+  if [ $DBINSTALLED != 8.2.23 ];
+  then  
+    pgvm install 8.2
+  fi
+  
+ pgvm use 8.2.23
   pgvm cluster create main
   pgvm cluster start main
 
   echo -e '\n'
   required_read '    informe o nome desejado para o banco de dados (ex: ieducar): '
   DBNAME=$_INPUT
+  ~/.pgvm/environments/8.2.23/bin/psql -d postgres -p 5433 -U $USER -e -c "\l" | grep $_INPUT
+  exit_if_failed $?
 
   echo -e '\n\n  * destruindo banco de dados caso exista\n'
   ~/.pgvm/environments/8.2.23/bin/dropdb $DBNAME -p 5433
