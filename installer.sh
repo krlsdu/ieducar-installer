@@ -123,7 +123,7 @@ install_pear () {
 
 install_pgvm () {
   echo -e '\n\n  * instalando pgvm\n'
-  curl -s -L https://raw.githubusercontent.com/krlsdu/pgvm/master/bin/pgvm-self-install | bash -s -- --update
+  #curl -s -L https://raw.githubusercontent.com/krlsdu/pgvm/master/bin/pgvm-self-install | bash -s -- --update
   exit_if_failed $?
 
   #source ~/.bashrc
@@ -144,10 +144,10 @@ install_pgvm () {
 
 install_pg () {
   echo -e '\n\n  * instalando postgres 8.2 via pgvm\n'
-  pgvm install 8.2
-  pgvm use 8.2.23
-  pgvm cluster create main
-  pgvm cluster start main
+  #pgvm install 8.2
+  #pgvm use 8.2.23
+  #pgvm cluster create main
+  #pgvm cluster start main
 
   echo -e '\n'
   required_read '    informe o nome desejado para o banco de dados (ex: ieducar): '
@@ -166,21 +166,22 @@ install_pg () {
   fi
 
   echo -e '\n\n  * baixando dump banco de dados\n'
-  rm -f bootstrap.backup.zip
-  rm -f bootstrap.backup
-  wget https://dl.dropboxusercontent.com/u/7006796/cdn/ieducativa/ieducar/comunidade/bootstrap.backup.zip
-  unzip bootstrap.backup.zip
+  rm -f /tmp/bootstrap.backup.zip
+  rm -f /tmp/bootstrap.backup
+  #wget https://dl.dropboxusercontent.com/u/7006796/cdn/ieducativa/ieducar/comunidade/bootstrap.backup.zip
+  cp bootstrap.backup.zip /tmp
+  unzip /tmp/bootstrap.backup.zip -d /tmp
   exit_if_failed $?
 
   echo -e '\n\n * restaurando dump do banco de dados\n'
   ~/.pgvm/environments/8.2.23/bin/createdb $DBNAME -E latin1 -p 5433
   exit_if_failed $?
 
-  ~/.pgvm/environments/8.2.23/bin/pg_restore -d $DBNAME -p 5433 -U $DBUSER --no-owner bootstrap.backup
+  ~/.pgvm/environments/8.2.23/bin/pg_restore -d $DBNAME -p 5433 -U $DBUSER --no-owner /tmp/bootstrap.backup
   exit_if_failed $?
 
-  rm -f bootstrap.backup.zip
-  rm -f bootstrap.backup
+  rm -f /tmp/bootstrap.backup.zip
+  rm -f /tmp/bootstrap.backup
 
   echo -e '\n\n * definindo search_path\n'
   ~/.pgvm/environments/8.2.23/bin/psql -d $DBNAME -p 5433 -c 'ALTER DATABASE '$DBNAME' SET search_path = "$user", public, portal, cadastro, acesso, alimentos, consistenciacao, historico, pmiacoes, pmicontrolesis, pmidrh, pmieducar, pmiotopic, urbano, modules;'
@@ -257,7 +258,8 @@ config_apache () {
   sudo rm -f /etc/apache2/sites-available/ieducar
   sudo rm -f /etc/apache2/sites-available/apache-sites-available-ieducar
 
-  sudo wget https://dl.dropboxusercontent.com/u/7006796/cdn/ieducativa/ieducar/comunidade/apache-sites-available-ieducar -P /etc/apache2/sites-available/
+  #sudo wget https://dl.dropboxusercontent.com/u/7006796/cdn/ieducativa/ieducar/comunidade/apache-sites-available-ieducar -P /etc/apache2/sites-available/
+  sudo cp apache-sites-available-ieducar -P /etc/apache2/sites-available
   sudo mv /etc/apache2/sites-available/apache-sites-available-ieducar /etc/apache2/sites-available/ieducar
 
   echo -e "\n\n  * reconfigurando virtual host\n"
@@ -296,7 +298,6 @@ before_install () {
 }
 
 install () {
-  cd ~
 
   before_install
   install_packages
