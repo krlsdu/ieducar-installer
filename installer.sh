@@ -158,8 +158,6 @@ install_pg () {
   echo -e '\n'
   required_read '    informe o nome desejado para o banco de dados (ex: ieducar): '
   DBNAME=$_INPUT
-  ~/.pgvm/environments/8.2.23/bin/psql -d postgres -p 5433 -U $USER -e -c "\l" | grep $_INPUT
-  exit_if_failed $?
 
   echo -e '\n\n  * destruindo banco de dados caso exista\n'
   ~/.pgvm/environments/8.2.23/bin/dropdb $DBNAME -p 5433
@@ -208,14 +206,14 @@ clone_ieducar () {
   APPDIR=$_INPUT
 
   echo -e '\n\n  * destruindo repositório ieducar local caso exista\n'
-  rm -rf $APPDIR
+  rm -rf $HOME/$APPDIR
 
   echo -e "\n\n  * clonando repositório ieducar no caminho $HOME/$APPDIR\n"
   git clone git://github.com/ieducativa/ieducar.git -b ieducativa $HOME/$APPDIR
   exit_if_failed $?
 
   echo -e "\n\n  * reconfigurando ieducar\n"
-  rpl "app.database.dbname   = ieducar" "app.database.dbname   = $DBNAME" $APPDIR/ieducar/configuration/ieducar.ini
+  rpl "app.database.dbname   = ieducar" "app.database.dbname   = $DBNAME" $HOME/$APPDIR/ieducar/configuration/ieducar.ini
   sudo service apache2 reload
 }
 
