@@ -126,7 +126,7 @@ install_pgvm () {
   curl -s -L https://raw.githubusercontent.com/krlsdu/pgvm/master/bin/pgvm-self-install | bash -s -- --update
   exit_if_failed $?
 
-  source ~/.bashrc
+ #source ~/.bashrc
 
   if [ -z "$pgvm_home" ]
   then
@@ -140,18 +140,21 @@ install_pgvm () {
     export PATH=${pgvm_home}/bin:$PATH
     export PATH=${pgvm_environments}/current/bin:$PATH
   fi
+
 }
 
 install_pg () {
-  
+
+
   echo -e '\n\n  * instalando postgres 8.2 via pgvm\n'
-  DBINSTALLED=`pgvm list | grep -o 8.2.23`
-  if [ $DBINSTALLED != 8.2.23 ];
-  then  
-    pgvm install 8.2
-  fi
-  
- pgvm use 8.2.23
+
+  DBVERSION="$(pgvm list|grep -o 8.2.23)"
+
+ if [ -z "$DBVERSION" ] || [ "$DBVERSION" != "8.2.23" ]; then
+  pgvm install 8.2
+ fi
+
+  pgvm use 8.2.23
   pgvm cluster create main
   pgvm cluster start main
 
@@ -209,7 +212,7 @@ clone_ieducar () {
   rm -rf $HOME/$APPDIR
 
   echo -e "\n\n  * clonando repositório ieducar no caminho $HOME/$APPDIR\n"
-  git clone git://github.com/ieducativa/ieducar.git -b ieducativa $HOME/$APPDIR
+  git clone https://github.com/ieducativa/ieducar.git -b ieducativa $HOME/$APPDIR
   exit_if_failed $?
 
   echo -e "\n\n  * reconfigurando ieducar\n"
