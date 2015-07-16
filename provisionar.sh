@@ -48,27 +48,26 @@ exit_if_failed $?
 
 echo -e '\n\n  * instalando pgvm\n'
 VAGRANT_HOME=/home/vagrant
-curl -s -L https://raw.github.com/krlsdu/pgvm/master/bin/pgvm-self-install  | bash -s -- --update --pgvm-home=$VAGRANT_HOME/.pgvm
+curl -s -L https://raw.github.com/krlsdu/pgvm/master/bin/pgvm-self-install  | bash -s -- --pgvm-home=$VAGRANT_HOME/.pgvm
 
-echo "source ${VAGRANT_HOME}/.pgvm/pgvm_env" | tee -a $VAGRANT_HOME/.bashrc ~/.bashrc
+echo "source $VAGRANT_HOME/.pgvm/pgvm_env" >> $VAGRANT_HOME/.bashrc
 
-source ~/.bashrc
-source $VAGRANT_HOME/.bashrc
-
+source $VAGRANT_HOME/.pgvm/pgvm_env
 
 echo -e '\n\n  * instalando postgres 8.2 via pgvm\n'
 
-DBVERSION="$(pgvm list|grep -o 8.2.23)"
+DBVERSION="$( pgvm list|grep -o 8.2.23)"
 
 if [ -z "$DBVERSION" ] || [ "$DBVERSION" != "8.2.23" ]; then
   pgvm install 8.2
 fi
 pgvm use 8.2.23
+
+pgvm cluster create main
+pgvm cluster start main
+
 chown vagrant:vagrant -vR $VAGRANT_HOME/.pgvm
 chmod 755 -vR $VAGRANT_HOME/.pgvm
-
-
-
 
 echo -e '\n\n  * instalando dependências i-Educar via pear\n'
 
