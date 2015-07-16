@@ -35,8 +35,8 @@ exit_if_failed () {
 }
 
 required_read () {
-  echo -n "$1"
-  read _INPUT
+
+ read -p "$1" _INPUT
 
   if [  -z "$_INPUT" ]; then
     required_read "$1"
@@ -82,8 +82,6 @@ login_or_create_user () {
 
 configurar_banco() {
 
-pgvm cluster create main
-pgvm cluster start main
   echo -e '\n'
   required_read '    informe o nome desejado para o banco de dados (ex: ieducar): '
   DBNAME=$_INPUT
@@ -104,9 +102,9 @@ pgvm cluster start main
   echo -e '\n\n  * baixando dump banco de dados\n'
   rm -f /tmp/bootstrap.backup.zip
   rm -f /tmp/bootstrap.backup
-  #wget https://dl.dropboxusercontent.com/u/7006796/cdn/ieducativa/ieducar/comunidade/bootstrap.backup.zip
-  cp bootstrap.backup.zip /tmp
-  unzip /tmp/bootstrap.backup.zip -d /tmp
+
+  cp /vagrant/bootstrap.backup.zip /tmp
+  unzip -q /tmp/bootstrap.backup.zip -d /tmp
   exit_if_failed $?
 
   echo -e '\n\n * restaurando dump do banco de dados\n'
@@ -151,7 +149,6 @@ config_apache () {
   sudo rm -f /etc/apache2/sites-available/ieducar
   sudo rm -f /etc/apache2/sites-available/apache-sites-available-ieducar
 
-  #sudo wget https://dl.dropboxusercontent.com/u/7006796/cdn/ieducativa/ieducar/comunidade/apache-sites-available-ieducar -P /etc/apache2/sites-available/
   sudo cp apache-sites-available-ieducar -P /etc/apache2/sites-available
   sudo mv /etc/apache2/sites-available/apache-sites-available-ieducar /etc/apache2/sites-available/ieducar
 
