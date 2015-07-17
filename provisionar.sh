@@ -62,12 +62,11 @@ if [ -z "$DBVERSION" ] || [ "$DBVERSION" != "8.2.23" ]; then
   pgvm install 8.2
 fi
 pgvm use 8.2.23
-
 pgvm cluster create main
 pgvm cluster start main
 
-chown vagrant:vagrant -vR $VAGRANT_HOME/.pgvm
-chmod 755 -vR $VAGRANT_HOME/.pgvm
+chown vagrant:vagrant -R $VAGRANT_HOME/.pgvm
+chmod 755 -R $VAGRANT_HOME/.pgvm
 
 echo -e '\n\n  * instalando dependências i-Educar via pear\n'
 

@@ -82,6 +82,10 @@ login_or_create_user () {
 
 configurar_banco() {
 
+  echo -e '\n\n  * criando cluster do  banco de dados\n'
+  pgvm cluster create main
+  pgvm cluster start main
+
   echo -e '\n'
   required_read '    informe o nome desejado para o banco de dados (ex: ieducar): '
   DBNAME=$_INPUT
