@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 <<LICENSE
 Copyright (c) 2014 Lucas D'Avila.
@@ -36,7 +36,7 @@ exit_if_failed () {
 
 required_read () {
 
- read -p "$1" _INPUT
+  read -p "$1" _INPUT
 
   if [  -z "$_INPUT" ]; then
     required_read "$1"
