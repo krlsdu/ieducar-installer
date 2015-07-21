@@ -28,7 +28,7 @@ DBNAME="ieducar"
 
 
   echo -e '\n'
-  echo -e 'Nome desejado para o banco de dados: $DBNAME'
+  echo -e 'Nome desejado para o banco de dados: ${DBNAME}'
   echo -e '\n\n  * destruindo banco de dados caso exista'
 
   ~/.pgvm/environments/8.2.23/bin/dropdb $DBNAME -p 5433
@@ -39,7 +39,7 @@ DBUSER="ieducar"
    export $2
  fi
 
-  echo 'Nome desejado para o usuario (ex: ieducar): $DBUSER'
+  echo 'Nome desejado para o usuario (ex: ieducar): ${DBUSER}'
   echo -e '\n\n  * criando usuário do banco de dados\n'
     ~/.pgvm/environments/8.2.23/bin/psql -d postgres -p 5433 -c "DROP USER IF EXISTS $DBUSER;"
     ~/.pgvm/environments/8.2.23/bin/createuser --superuser $DBUSER -p 5433
@@ -70,7 +70,7 @@ DBUSER="ieducar"
 
 
 clone_ieducar () {
-  echo -e 'nome do diretório em que a aplicação será instal(ex: ieduc'
+  echo -e 'nome do diretório em que a aplicação será instal(ex: ieducar'
   APPDIR="ieducar"
 
   echo -e '\n\n  * destruindo repositório ieducar local caso exista\n'
