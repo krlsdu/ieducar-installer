@@ -28,7 +28,7 @@ DBNAME="ieducar"
 
 
   echo -e '\n'
-  echo -e "Nome desejado para o banco de dados: ${DBNAME}"
+  echo -e "Nome desejado para o banco de dados:$1        ${DBNAME}"
   echo -e '\n\n  * destruindo banco de dados caso exista'
 
   ~/.pgvm/environments/8.2.23/bin/dropdb $DBNAME -p 5433
@@ -70,7 +70,7 @@ DBUSER="ieducar"
 
 
 clone_ieducar () {
-  echo -e 'nome do diretório em que a aplicação será instal(ex: ieducar'
+  echo -e 'nome do diretório em que a aplicação será instal(ex: ieducar)'
   APPDIR="ieducar"
 
   echo -e '\n\n  * destruindo repositório ieducar local caso exista\n'
@@ -119,7 +119,7 @@ before_install () {
 }
 
 install () {
-  configurar_banco
+  configurar_banco $1
   clone_ieducar
   config_apache
 
@@ -147,5 +147,5 @@ if [ $USER = 'root' ]; then
   $1=1
 else
   echo -e "instalando i-Educar com usuário $USER"
-  install
+  install $1
 fi
