@@ -43,7 +43,7 @@ sudo service apache2 restart
 exit_if_failed $?
 
 echo -e '\n\n  * instalando git\n'
-sudo apt-get install -y git-core
+sudo apt-get install -y -qq git-core
 exit_if_failed $?
 
 echo -e '\n\n  * instalando pgvm\n'

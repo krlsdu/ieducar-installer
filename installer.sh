@@ -1,25 +1,4 @@
 #!/usr/bin/env bash
-
-<<LICENSE
-Copyright (c) 2014 Lucas D'Avila.
-
---
-
-This file is part of ieducar-installer.
-
-Ieducar-installer is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, version 3 of the License.
-
-Ieducar-installer is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with ieducar-installer.  If not, see <http://www.gnu.org/licenses/>.
-LICENSE
-
 echo -e '\n\n  Bem vindo a instalação do i-Educar.'
 echo -e '\n  Este script lhe guiará na instalação do software, para mais detalhes acesse o site http://comunidade.ieducativa.com.br/'
 
@@ -34,51 +13,6 @@ exit_if_failed () {
   exit 1;
 }
 
-required_read () {
-
-  read -p "$1" _INPUT
-
-  if [  -z "$_INPUT" ]; then
-    required_read "$1"
-  fi
-}
-
-login_or_create_user () {
-  echo -e "\n  A instalação não pode ser realizada pelo usuário root, selecione uma opção:\n"
-  echo -e '    1 - logar-se com outro usuário'
-  echo -e '    2 - criar um novo usuário\n'
-
-  required_read '    opção: '
-
-  if [ $_INPUT = 1 ]; then
-    echo -e '\n'
-    required_read '    informe o nome do seu usuário: '
-
-    su $_INPUT $0
-    exit 0
-
-  elif [[ $_INPUT = 2 ]]; then
-    echo -e '\n'
-    required_read '    informe o nome do novo usuário (ex: ieducar): '
-
-    useradd --create-home --groups sudo --shell /bin/bash $_INPUT
-    exit_if_failed $?
-
-    echo -e '\n    por favor, informe a senha do novo usuário:\n'
-    sudo passwd $_INPUT
-    exit_if_failed $?
-
-    su $_INPUT $0
-    exit 0
-  else
-    echo -e '\n'
-    echo -n '    opção inválida, tente novamente.'
-    read -n 1
-
-    login_or_create_user
-  fi
-}
-
 
 configurar_banco() {
 
@@ -86,22 +20,30 @@ configurar_banco() {
   pgvm cluster create main
   pgvm cluster start main
 
-  echo -e '\n'
-  required_read '    informe o nome desejado para o banco de dados (ex: ieducar): '
-  DBNAME=$_INPUT
+DBNAME="ieducar"
+ 
+ if [ -n "$1" ]; then
+   export $1
+ fi
 
-  echo -e '\n\n  * destruindo banco de dados caso exista\n'
+
+  echo -e '\n'
+  echo -e 'Nome desejado para o banco de dados: $DBNAME'
+  echo -e '\n\n  * destruindo banco de dados caso exista'
+
   ~/.pgvm/environments/8.2.23/bin/dropdb $DBNAME -p 5433
 
-  required_read '    informe o nome desejado para o usuario (ex: ieducar): '
-  DBUSER=$_INPUT
+DBUSER="ieducar"
+ 
+ if [ -n "$2" ]; then
+   export $2
+ fi
 
-  if [ $USER != $DBUSER ]; then
-    echo -e '\n\n  * criando usuário do banco de dados\n'
+  echo 'Nome desejado para o usuario (ex: ieducar): $DBUSER'
+  echo -e '\n\n  * criando usuário do banco de dados\n'
     ~/.pgvm/environments/8.2.23/bin/psql -d postgres -p 5433 -c "DROP USER IF EXISTS $DBUSER;"
     ~/.pgvm/environments/8.2.23/bin/createuser --superuser $DBUSER -p 5433
     exit_if_failed $?
-  fi
 
   echo -e '\n\n  * baixando dump banco de dados\n'
   rm -f /tmp/bootstrap.backup.zip
@@ -128,14 +70,13 @@ configurar_banco() {
 
 
 clone_ieducar () {
-  echo -e '\n'
-  required_read '    informe o nome do diretório em que a aplicação será instalada (ex: ieducar): '
-  APPDIR=$_INPUT
+  echo -e 'nome do diretório em que a aplicação será instal(ex: ieduc'
+  APPDIR="ieducar"
 
   echo -e '\n\n  * destruindo repositório ieducar local caso exista\n'
   rm -rf $HOME/$APPDIR
 
-  echo -e "\n\n  * clonando repositório ieducar no caminho $HOME/$APPDIR\n"
+  echo -e "\n\n  * clonando repositório ieducar no caminho$HOME/$APPDI"
   git clone https://github.com/ieducativa/ieducar.git -b ieducativa $HOME/$APPDIR
   exit_if_failed $?
 
@@ -153,7 +94,7 @@ config_apache () {
   sudo rm -f /etc/apache2/sites-available/ieducar
   sudo rm -f /etc/apache2/sites-available/apache-sites-available-ieducar
 
-  sudo cp apache-sites-available-ieducar -P /etc/apache2/sites-available
+  sudo cp /vagrant/apache-sites-available-ieducar -P /etc/apache2/sites-available
   sudo mv /etc/apache2/sites-available/apache-sites-available-ieducar /etc/apache2/sites-available/ieducar
 
   echo -e "\n\n  * reconfigurando virtual host\n"
@@ -164,16 +105,10 @@ config_apache () {
   sudo a2ensite ieducar
   sudo service apache2 restart
 
-  if [ $ISSERVER = 0 ]; then
-    echo -e '\n'
-    required_read '    informe o host desejado para acesso local ao sistema no navegador (ex: ieducar.local): '
-    HOST=$_INPUT
-
     if ! grep -q $HOST /etc/hosts; then
       echo -e '\n\n * adicionando host para $HOST\n'
       echo "127.0.0.1   $HOST" | sudo tee -a /etc/hosts
     fi
-  fi
 }
 
 
@@ -184,14 +119,12 @@ before_install () {
 }
 
 install () {
-
-  before_install
   configurar_banco
   clone_ieducar
   config_apache
 
   echo -e '\n\n  --------------------------------------------'
-  echo -e "\n  Parabéns o i-Educar foi instalado com sucesso,"
+  echo -e '\n  Parabéns o i-Educar foi instalado com sucesso'
 
   server_ip=$(ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p')
 
@@ -211,8 +144,8 @@ install () {
 }
 
 if [ $USER = 'root' ]; then
-  login_or_create_user
+  $1=1
 else
-  echo -e "\n\n  instalando i-Educar com usuário $USER"
+  echo -e "instalando i-Educar com usuário $USER"
   install
 fi
