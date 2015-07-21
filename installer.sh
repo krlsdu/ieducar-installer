@@ -19,6 +19,9 @@ configurar_banco() {
   echo -e '\n\n  * criando cluster do  banco de dados\n'
   pgvm cluster create main
   pgvm cluster start main
+  
+  echo "Please enter some input: "
+  read input_variable
 
 DBNAME="ieducar"
  
