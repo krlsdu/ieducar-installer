@@ -19,9 +19,6 @@ configurar_banco() {
   echo -e '\n\n  * criando cluster do  banco de dados\n'
   pgvm cluster create main
   pgvm cluster start main
-  
-  echo "Please enter some input: "
-  read input_variable
 
 DBNAME="ieducar"
  
@@ -31,7 +28,7 @@ DBNAME="ieducar"
 
 
   echo -e '\n'
-  echo -e 'Nome desejado para o banco de dados: ${DBNAME}'
+  echo -e "Nome desejado para o banco de dados: ${DBNAME}"
   echo -e '\n\n  * destruindo banco de dados caso exista'
 
   ~/.pgvm/environments/8.2.23/bin/dropdb $DBNAME -p 5433
@@ -42,7 +39,7 @@ DBUSER="ieducar"
    export $2
  fi
 
-  echo 'Nome desejado para o usuario (ex: ieducar): ${DBUSER}'
+  echo "Nome desejado para o usuario (ex: ieducar): ${DBUSER}"
   echo -e '\n\n  * criando usuário do banco de dados\n'
     ~/.pgvm/environments/8.2.23/bin/psql -d postgres -p 5433 -c "DROP USER IF EXISTS $DBUSER;"
     ~/.pgvm/environments/8.2.23/bin/createuser --superuser $DBUSER -p 5433
