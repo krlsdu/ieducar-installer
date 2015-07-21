@@ -14,15 +14,15 @@ echo -e '\n  * instalando dependências\n'
 # fix "Failed to fetch bzip2 ... Hash Sum mismatch" error on apt-get update
 sudo rm -rf /var/lib/apt/lists/*
 
-apt-get update -y
-apt-get install -y curl wget rpl unzip vim
+apt-get update -y -qq
+apt-get install -y -qq curl wget rpl unzip vim
 exit_if_failed $?
 
-sudo apt-get install -y libreadline6 libreadline6-dev make gcc zlib1g-dev flex bison
+sudo apt-get install -y -qq libreadline6 libreadline6-dev make gcc zlib1g-dev flex bison
 exit_if_failed $?
 
 echo -e '\n\n  * instalando apache\n'
-sudo apt-get install -y apache2
+sudo apt-get install -y -qq apache2
 exit_if_failed $?
 
 sudo a2enmod rewrite
@@ -32,11 +32,11 @@ sudo service apache2 restart
 exit_if_failed $?
 
 echo -e '\n\n  * instalando php\n'
-sudo apt-get install -y libapache2-mod-php5 php5-pgsql php5-curl
+sudo apt-get install -y -qq libapache2-mod-php5 php5-pgsql php5-curl
 exit_if_failed $?
 
 echo -e '\n\n  * instalando pear\n'
-sudo apt-get install -y php-pear
+sudo apt-get install -y -qq php-pear
 exit_if_failed $?
 
 sudo service apache2 restart
