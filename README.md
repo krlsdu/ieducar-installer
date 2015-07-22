@@ -1,5 +1,5 @@
 # Instalador do iEducar
-Este projeto permite provisionar máquina e instalar o software de gestão escolar iEducar em máquina virtual utilizando a ferramenta vagrant.
+Esta versão do projeto permite provisionar máquina e instalar o software de gestão escolar iEducar em máquina virtual utilizando a ferramenta vagrant.
 
 O instalador permite customizar no momento da instalação:  
 
