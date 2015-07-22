@@ -103,8 +103,6 @@ config_apache () {
 before_install () {
 
   DBNAME="ieducar"
-echo "nome do banco de dados"
-read -p DBNAME
 
   if [ -n "$1" ]; then
     export $1
