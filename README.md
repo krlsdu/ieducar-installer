@@ -1,5 +1,5 @@
 # Instalador do iEducar
-Este instalador permite instalar o software de gestão escolar iEducar em servidores rodando o sistema operacional Ubuntu.
+Este projeto permite provisionar máquina e instalar o software de gestão escolar iEducar em máquina virtual utilizando a ferramenta vagrant.
 
 O instalador permite customizar no momento da instalação:  
 
