@@ -1,14 +1,45 @@
 # Instalador do iEducar
-Este instalador permite instalar o software de gestão escolar iEducar em servidores rodando o sistema operacional Ubuntu.  
+Este instalador permite instalar o software de gestão escolar iEducar em servidores rodando o sistema operacional Ubuntu.
 
 O instalador permite customizar no momento da instalação:  
 
-* O usuário no qual o sistema será instalado.
 * O nome do banco de dados.
+* O nome do usuário do banco
 * O nome do diretório de instalação.
 
+## Dependências
+* Vagrant
+* Virtual Box
+* Acesso a internet
+
 ## Como instalar
-Para saber como usar o instalador acesse [comunidade.ieducativa.com.br#instalador](http://comunidade.ieducativa.com.br#instalador).
+
+ Clone o repositório
+ 
+ ```
+ git clone https://github.com/krlsdu/ieducar-installer.git
+ ```
+ 
+  Crie a máquina virtual
+ 
+ ```
+ vagrant up
+ ```
+ 
+  Acesse a máquina virtual
+ 
+ ```
+ vagrant ssh
+ ```
+   
+   Configure o ambiente
+ 
+ ```
+ curl https://raw.githubusercontent.com/krlsdu/ieducar-installer/master/installer.sh | bash -s -- DBNAME=ieducar DBUSER=ieducar APPDIR=ieducar
+ ```
 
 ## Licença
-Copyright (c) 2014 Lucas D'Avila. Leia os arquivos COPYING.txt e COPYING.LESSER.txt para saber sobre os direitos e limitações da licença.
+
+# Sobre este fork
+
+É uma compilação do trabalho de Lucas D'Avila. e da Comunidade ieducativa
