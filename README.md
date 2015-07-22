@@ -49,6 +49,6 @@ O instalador permite customizar no momento da instalação:
 
 ## Licença
 
-# Sobre este fork
+#### Sobre este fork
 
 É uma compilação do trabalho de Lucas D'Avila. e da Comunidade ieducativa
