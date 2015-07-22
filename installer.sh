@@ -78,12 +78,12 @@ APPDIR="ieducar"
  fi
 
 
-  echo -e "nome do diretório em que a aplicação será instal(ex: ieducar): $APPDIR"
+  echo -e "nome do diretório em que a aplicação será instalado(ex: ieducar): $APPDIR"
 
   echo -e '\n\n  * destruindo repositório ieducar local caso exista\n'
   rm -rf $HOME/$APPDIR
 
-  echo -e "\n\n  * clonando repositório ieducar no caminho $HOME/$APPDI"
+  echo -e "\n\n  * clonando repositório ieducar no caminho $HOME/$APPDIR"
   git clone https://github.com/ieducativa/ieducar.git -b ieducativa $HOME/$APPDIR
   exit_if_failed $?
 
