@@ -20,30 +20,17 @@ configurar_banco() {
   pgvm cluster create main
   pgvm cluster start main
 
-DBNAME="ieducar"
- 
- if [ -n "$1" ]; then
-   export $1
- fi
-
-
   echo -e '\n'
   echo -e "Nome desejado para o banco de dados: ${DBNAME}"
   echo -e '\n\n  * destruindo banco de dados caso exista'
 
   ~/.pgvm/environments/8.2.23/bin/dropdb $DBNAME -p 5433
 
-DBUSER="ieducar"
- 
- if [ -n "$2" ]; then
-   export $2
- fi
-
   echo "Nome desejado para o usuario (ex: ieducar): ${DBUSER}"
   echo -e '\n\n  * criando usuário do banco de dados\n'
-    ~/.pgvm/environments/8.2.23/bin/psql -d postgres -p 5433 -c "DROP USER IF EXISTS $DBUSER;"
-    ~/.pgvm/environments/8.2.23/bin/createuser --superuser $DBUSER -p 5433
-    exit_if_failed $?
+  ~/.pgvm/environments/8.2.23/bin/psql -d postgres -p 5433 -c "DROP USER IF EXISTS $DBUSER;"
+  ~/.pgvm/environments/8.2.23/bin/createuser --superuser $DBUSER -p 5433
+  exit_if_failed $?
 
   echo -e '\n\n  * baixando dump banco de dados\n'
   rm -f /tmp/bootstrap.backup.zip
@@ -71,19 +58,12 @@ DBUSER="ieducar"
 
 clone_ieducar () {
 
-APPDIR="ieducar"
-
- if [ -n "$3" ]; then
-   export $3
- fi
-
-
-  echo -e "nome do diretório em que a aplicação será instalado(ex: ieducar): $APPDIR"
+  echo -e "nome do diretório em que a aplicação será instalado(ex: ieducar): ${APPDIR}"
 
   echo -e '\n\n  * destruindo repositório ieducar local caso exista\n'
   rm -rf $HOME/$APPDIR
 
-  echo -e "\n\n  * clonando repositório ieducar no caminho $HOME/$APPDIR"
+  echo -e "\n\n  * clonando repositório ieducar no caminho $HOME/${APPDIR}"
   git clone https://github.com/ieducativa/ieducar.git -b ieducativa $HOME/$APPDIR
   exit_if_failed $?
 
@@ -112,22 +92,35 @@ config_apache () {
   sudo a2ensite ieducar
   sudo service apache2 restart
 
-    if ! grep -q ieducar.local /etc/hosts; then
-      echo -e "\n\n * adicionando host para $HOST \n"
-      echo "127.0.0.1   ieducar.local" | sudo tee -a /etc/hosts
-    fi
+  if ! grep -q ieducar.local /etc/hosts; then
+    echo -e "\n\n * adicionando host para ieducar.local \n"
+    echo "127.0.0.1   ieducar.local" | sudo tee -a /etc/hosts
+  fi
 }
 
 
 
 before_install () {
-  dpkg -l ubuntu-desktop >/dev/null 2>/dev/null
-  ISSERVER=$? # ! desktop
+
+  DBNAME="ieducar"
+  if [ -n "$1" ]; then
+    export $1
+  fi
+
+  DBUSER="ieducar"
+  if [ -n "$2" ]; then
+    export $2
+  fi
+
+  APPDIR="ieducar"
+  if [ -n "$3" ]; then
+    export $3
+  fi
 }
 
 install () {
-  configurar_banco $1 $2
-  clone_ieducar $3
+  configurar_banco
+  clone_ieducar
   config_apache
 
   echo -e '\n\n  --------------------------------------------'
@@ -154,5 +147,6 @@ if [ $USER = 'root' ]; then
   $1=1
 else
   echo -e "instalando i-Educar com usuário $USER"
-  install $1 $2 $3
+  before_install $1 $2 $3
+  install
 fi
