@@ -128,11 +128,7 @@ install () {
 
   server_ip=$(ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p')
 
-  if [ $ISSERVER = 0 ]; then
-    echo -e "  você pode acessar o sistema em http://$HOST/ (neste computador) ou em http://$server_ip/ nos demais computadores da rede local."
-  else
-    echo -e "  você pode acessar o sistema em http://$server_ip/"
-  fi
+  echo -e "  você pode acessar o sistema em http://ieducar.local:8080/ (neste computador) ou em http://$server_ip:8080/ nos demais computadores da rede local."
 
   echo -e "\n  utilize usuário admin e senha admin"
 
