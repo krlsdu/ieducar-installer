@@ -26,7 +26,7 @@ configurar_banco() {
 
   ~/.pgvm/environments/8.2.23/bin/dropdb $DBNAME -p 5433
 
-  echo "Nome desejado para o usuario (ex: ieducar): ${DBUSER}"
+  echo "Nome desejado para o usuario: ${DBUSER}"
   echo -e '\n\n  * criando usuário do banco de dados\n'
   ~/.pgvm/environments/8.2.23/bin/psql -d postgres -p 5433 -c "DROP USER IF EXISTS $DBUSER;"
   ~/.pgvm/environments/8.2.23/bin/createuser --superuser $DBUSER -p 5433
@@ -103,6 +103,9 @@ config_apache () {
 before_install () {
 
   DBNAME="ieducar"
+echo "nome do banco de dados"
+read -p DBNAME
+
   if [ -n "$1" ]; then
     export $1
   fi
