@@ -120,6 +120,12 @@ before_install () {
 }
 
 install () {
+  if [ $USER = 'root' ]; then
+    $1=1
+  else
+    echo -e "instalando i-Educar com usuário $USER"
+    before_install $1 $2 $3
+  fi
   configurar_banco
   clone_ieducar
   config_apache
@@ -140,10 +146,4 @@ install () {
   echo -e '  lucas@ieducativa.com.br\n'
 }
 
-if [ $USER = 'root' ]; then
-  $1=1
-else
-  echo -e "instalando i-Educar com usuário $USER"
-  before_install $1 $2 $3
-  install
-fi
+$@
