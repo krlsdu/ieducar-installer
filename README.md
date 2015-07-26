@@ -38,7 +38,7 @@ O instalador permite customizar no momento da instalação:
 #### Configurações padrão
   
   ```
- curl https://raw.githubusercontent.com/krlsdu/ieducar-installer/master/installer.sh | bash
+ curl https://raw.githubusercontent.com/krlsdu/ieducar-installer/master/installer.sh | bash -s install
  ```
  
 #### Configuração personalizada
